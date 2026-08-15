@@ -289,19 +289,36 @@ export default function App() {
       },
     });
 
-    document.querySelectorAll('.marquee-wrap').forEach((el) => {
-      const speed = parseFloat(el.dataset.scrollSpeed) || -35;
-      gsap.to(el.querySelector('.marquee-text'), {
-        xPercent: speed,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: scrollContainerRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: true,
-        },
-      });
-    });
+    const marqueeEl = document.querySelector('.marquee-wrap');
+    if (marqueeEl) {
+      const marqueeText = marqueeEl.querySelector('.marquee-text');
+      if (marqueeText) {
+        const updateMarqueeAnimation = () => {
+          const textWidth = marqueeText.scrollWidth;
+          const windowWidth = window.innerWidth;
+          const totalDistance = Math.max(textWidth - windowWidth + 150, 0);
+
+          gsap.fromTo(
+            marqueeText,
+            { x: 0 },
+            {
+              x: -totalDistance,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: scrollContainerRef.current,
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: true,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        };
+
+        updateMarqueeAnimation();
+        window.addEventListener('resize', updateMarqueeAnimation);
+      }
+    }
 
     return () => {
       if (animFrameIdRef.current) cancelAnimationFrame(animFrameIdRef.current);
@@ -376,25 +393,25 @@ export default function App() {
           <li>
             <a href="#concept" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>
               <span>01 / Concepto</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
           </li>
           <li>
             <a href="#craft" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>
               <span>02 / Construcción</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
           </li>
           <li>
             <a href="#specs" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>
               <span>03 / Especificaciones</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
           </li>
           <li>
             <a href="#lookbook" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>
               <span>04 / Editorial Lookbook</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
           </li>
         </ul>
@@ -413,7 +430,7 @@ export default function App() {
 
       <div className="marquee-wrap" data-scroll-speed="-35">
         <div className="marquee-text">
-          TRANSICIÓN • ARQUITECTURA • SOMBRAS • MINIMALISMO • IDENTIDAD • CORE TEE • UMBRAL [U] • OBJECTS FOR THE EVERYDAY •
+          CORE TEE • UMBRAL [U] • OBJECTS FOR THE EVERYDAY •
         </div>
       </div>
 
