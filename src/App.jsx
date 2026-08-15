@@ -16,6 +16,7 @@ export default function App() {
   const [loadPercent, setLoadPercent] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedSize, setSelectedSize] = useState('M');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [statValues, setStatValues] = useState({
     gsm: 0,
@@ -334,7 +335,7 @@ export default function App() {
       <header className="site-header">
         <nav>
           <div className="nav-left">
-            <a href="#hero" className="nav-brand">
+            <a href="#hero" className="nav-brand" onClick={() => setIsMobileMenuOpen(false)}>
               <span className="nav-isotipo">[U]</span>
               <span>UMBRAL</span>
             </a>
@@ -347,15 +348,62 @@ export default function App() {
             <li><a href="#lookbook" className="nav-link">Editorial</a></li>
           </ul>
           <div className="nav-right">
-            <a href="#acquire" className="btn-pill-cta">
+            <a href="#acquire" className="btn-pill-cta" onClick={() => setIsMobileMenuOpen(false)}>
               <span>DROP 001</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </a>
+            <button
+              type="button"
+              className="menu-toggle-btn"
+              aria-label="Abrir menú de navegación"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <div className={`menu-icon ${isMobileMenuOpen ? 'is-open' : ''}`}>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
           </div>
         </nav>
       </header>
+
+      {/* Mobile Navigation Drawer */}
+      <div className={`mobile-nav-drawer ${isMobileMenuOpen ? 'is-open' : ''}`}>
+        <ul className="mobile-nav-links">
+          <li>
+            <a href="#concept" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <span>01 / Concepto</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="#craft" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <span>02 / Construcción</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="#specs" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <span>03 / Especificaciones</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="#lookbook" className="mobile-nav-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <span>04 / Editorial Lookbook</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </li>
+        </ul>
+        <div className="mobile-nav-divider"></div>
+        <div className="mobile-nav-footer">
+          <span>DROP 001 // $25 USD</span>
+          <span>CARACAS, VE</span>
+        </div>
+      </div>
 
       <div className="canvas-wrap">
         <canvas ref={canvasRef} id="canvas"></canvas>

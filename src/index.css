@@ -143,17 +143,15 @@ html, body {
   pointer-events: auto;
   width: 100%;
   max-width: 960px;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
-  gap: 2rem;
+  justify-content: space-between;
   padding: 10px 24px;
   border-radius: 9999px;
   background-color: rgba(12, 12, 12, 0.88);
   backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-left {
@@ -225,7 +223,7 @@ html, body {
 .nav-right {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  gap: 0.8rem;
 }
 
 .btn-pill-cta {
@@ -252,6 +250,133 @@ html, body {
   background-color: var(--accent-red-hover);
   box-shadow: 0 0 25px var(--accent-red-glow);
   transform: translateY(-1px);
+}
+
+/* Menu Toggle Button for Mobile */
+.menu-toggle-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.menu-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 16px;
+}
+
+.menu-icon span {
+  display: block;
+  height: 1.5px;
+  width: 100%;
+  background-color: var(--off-white);
+  border-radius: 1px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-icon.is-open span:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+
+.menu-icon.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-icon.is-open span:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+/* Mobile Drawer Menu */
+.mobile-nav-drawer {
+  position: fixed;
+  top: 72px;
+  left: 4vw;
+  right: 4vw;
+  z-index: 999;
+  background: rgba(12, 12, 12, 0.94);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 1.8rem 1.5rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-15px) scale(0.98);
+  transition: opacity 0.35s var(--ease-out-expo), transform 0.35s var(--ease-out-expo), visibility 0.35s;
+}
+
+.mobile-nav-drawer.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.mobile-nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.mobile-nav-link {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--off-white);
+  text-decoration: none;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mobile-nav-link:hover, .mobile-nav-link:active {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--accent-red);
+}
+
+.mobile-nav-link svg {
+  color: var(--concrete-gray);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.mobile-nav-link:hover svg {
+  transform: translateX(4px);
+  color: var(--accent-red);
+}
+
+.mobile-nav-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 1.2rem 0;
+}
+
+.mobile-nav-footer {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--concrete-gray);
+  text-transform: uppercase;
+  padding: 0 0.8rem;
 }
 
 .canvas-wrap {
@@ -1003,17 +1128,35 @@ html, body {
 
 @media (max-width: 968px) {
   .site-header {
-    padding: 1rem 4vw;
+    padding: 0.9rem 4vw;
   }
 
   .site-header nav {
-    grid-template-columns: auto auto;
-    gap: 1rem;
-    padding: 10px 18px;
+    padding: 8px 14px;
+    gap: 0.5rem;
   }
   
+  .nav-brand {
+    font-size: 1.15rem;
+    gap: 0.4rem;
+  }
+
+  .nav-isotipo {
+    font-size: 1.05rem;
+  }
+
   .nav-links {
     display: none;
+  }
+
+  .btn-pill-cta {
+    font-size: 0.65rem;
+    padding: 0.5rem 1rem;
+    gap: 0.35rem;
+  }
+
+  .menu-toggle-btn {
+    display: flex;
   }
 
   .align-left, .align-right {
@@ -1064,7 +1207,7 @@ html, body {
   }
 
   .hero-standalone {
-    padding: 6rem 5vw 2rem;
+    padding: 6.5rem 5vw 2rem;
   }
 
   .hero-meta-block {
