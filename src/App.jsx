@@ -12,7 +12,7 @@ export default function App() {
   const canvasRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const darkOverlayRef = useRef(null);
-  
+
   const [loadPercent, setLoadPercent] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedSize, setSelectedSize] = useState('M');
@@ -26,13 +26,15 @@ export default function App() {
 
   const framesRef = useRef([]);
   const currentFrameRef = useRef(0);
+  const targetFrameRef = useRef(0);
+  const animFrameIdRef = useRef(null);
   const timelinesRef = useRef(new Map());
   const countersAnimatedRef = useRef(false);
 
   const drawFrame = (index) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
     const img = framesRef.current[index];
     if (!img || !img.complete || img.naturalWidth === 0) return;
 
@@ -58,10 +60,11 @@ export default function App() {
     if (!canvas) return;
 
     const handleResize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const isMobile = window.innerWidth < 768;
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
-      const ctx = canvas.getContext('2d', { alpha: false });
+      const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
       ctx.scale(dpr, dpr);
       if (framesRef.current[currentFrameRef.current]) {
         drawFrame(currentFrameRef.current);
@@ -73,12 +76,13 @@ export default function App() {
 
     let loadedCount = 0;
     const loadedFrames = [];
+    const baseUrl = import.meta.env.BASE_URL;
 
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
+      img.decoding = 'async';
       const frameNum = String(i).padStart(3, '0');
-      const baseUrl = import.meta.env.BASE_URL;
-      img.src = `${baseUrl}assets/frames/ezgif-frame-${frameNum}.png`;
+      img.src = `${baseUrl}assets/frames/ezgif-frame-${frameNum}.webp`;
 
       img.onload = () => {
         loadedCount++;
@@ -96,7 +100,7 @@ export default function App() {
           setTimeout(() => {
             setIsLoaded(true);
             drawFrame(0);
-          }, 300);
+          }, 200);
         }
       };
 
@@ -121,18 +125,40 @@ export default function App() {
 
     drawFrame(0);
 
+    const isMobile = window.innerWidth < 768;
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: isMobile ? 0.9 : 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 0.95,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.8,
+      syncTouch: false,
     });
 
     lenis.on('scroll', ScrollTrigger.update);
     const tickerCallback = (time) => lenis.raf(time * 1000);
     gsap.ticker.add(tickerCallback);
     gsap.ticker.lagSmoothing(0);
+
+    const startRafLoop = () => {
+      const renderLoop = () => {
+        const target = targetFrameRef.current;
+        const current = currentFrameRef.current;
+
+        if (Math.abs(target - current) > 0.05) {
+          const next = current + (target - current) * 0.25;
+          currentFrameRef.current = next;
+          drawFrame(Math.round(next));
+        } else if (current !== target) {
+          currentFrameRef.current = target;
+          drawFrame(target);
+        }
+
+        animFrameIdRef.current = requestAnimationFrame(renderLoop);
+      };
+      animFrameIdRef.current = requestAnimationFrame(renderLoop);
+    };
+    startRafLoop();
 
     gsap.to('#hero', {
       opacity: 0,
@@ -159,28 +185,28 @@ export default function App() {
           tl.fromTo(
             targets,
             { x: -60, opacity: 0 },
-            { x: 0, opacity: 1, stagger: 0.12, duration: 0.8, ease: 'power3.out' }
+            { x: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: 'power3.out' }
           );
           break;
         case 'clip-reveal':
           tl.fromTo(
             targets,
             { clipPath: 'inset(100% 0 0 0)', y: 35, opacity: 0 },
-            { clipPath: 'inset(0% 0 0 0)', y: 0, opacity: 1, stagger: 0.12, duration: 0.9, ease: 'power4.out' }
+            { clipPath: 'inset(0% 0 0 0)', y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power4.out' }
           );
           break;
         case 'stagger-up':
           tl.fromTo(
             targets,
             { y: 50, opacity: 0 },
-            { y: 0, opacity: 1, stagger: 0.14, duration: 0.85, ease: 'power3.out' }
+            { y: 0, opacity: 1, stagger: 0.12, duration: 0.75, ease: 'power3.out' }
           );
           break;
         case 'scale-up':
           tl.fromTo(
             targets,
             { scale: 0.92, y: 30, opacity: 0 },
-            { scale: 1, y: 0, opacity: 1, stagger: 0.12, duration: 0.9, ease: 'power2.out' }
+            { scale: 1, y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' }
           );
           break;
         case 'fade-up':
@@ -188,7 +214,7 @@ export default function App() {
           tl.fromTo(
             targets,
             { y: 45, opacity: 0 },
-            { y: 0, opacity: 1, stagger: 0.12, duration: 0.85, ease: 'power3.out' }
+            { y: 0, opacity: 1, stagger: 0.1, duration: 0.75, ease: 'power3.out' }
           );
           break;
       }
@@ -199,18 +225,14 @@ export default function App() {
       trigger: scrollContainerRef.current,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: true,
+      scrub: isMobile ? 0.3 : true,
       onUpdate: (self) => {
         const frameProgress = Math.min(self.progress / 0.85, 1);
-        const index = Math.min(
+        const nextTarget = Math.min(
           Math.floor(frameProgress * TOTAL_FRAMES),
           TOTAL_FRAMES - 1
         );
-
-        if (index !== currentFrameRef.current) {
-          currentFrameRef.current = index;
-          requestAnimationFrame(() => drawFrame(currentFrameRef.current));
-        }
+        targetFrameRef.current = nextTarget;
 
         const pPercent = self.progress * 100;
         let overlayOpacity = 0.15;
@@ -281,6 +303,7 @@ export default function App() {
     });
 
     return () => {
+      if (animFrameIdRef.current) cancelAnimationFrame(animFrameIdRef.current);
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
       triggerInstance.kill();
@@ -303,7 +326,7 @@ export default function App() {
           <div id="loader-bar" style={{ width: `${loadPercent}%` }}></div>
         </div>
         <div className="loader-meta">
-          <span>CARGANDO SECUENCIA (198 FRAMES)</span>
+          <span>OPTIMIZANDO EXPERIENCIA</span>
           <span id="loader-percent">{loadPercent}%</span>
         </div>
       </div>
@@ -491,21 +514,21 @@ export default function App() {
             <h2 className="section-heading">SOMBRAS & ARQUITECTURA</h2>
             <div className="lookbook-grid">
               <div className="lookbook-card">
-                <img src={`${import.meta.env.BASE_URL}assets/branding/1.jpg`} alt="Umbral Lookbook 01" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/branding/1.webp`} alt="Umbral Lookbook 01" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">PERSPECTIVA FRONTAL</span>
                   <span className="lookbook-coord">10°29'N 66°53'W</span>
                 </div>
               </div>
               <div className="lookbook-card">
-                <img src={`${import.meta.env.BASE_URL}assets/branding/2.jpg`} alt="Umbral Lookbook 02" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/branding/2.webp`} alt="Umbral Lookbook 02" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">DETALLE CONSTRUCCIÓN</span>
                   <span className="lookbook-coord">HEAVY RIB COLLAR</span>
                 </div>
               </div>
               <div className="lookbook-card">
-                <img src={`${import.meta.env.BASE_URL}assets/branding/3.jpg`} alt="Umbral Lookbook 03" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/branding/3.webp`} alt="Umbral Lookbook 03" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">SILUETA POSTERIOR</span>
                   <span className="lookbook-coord">OVERSIZED DRAPE</span>
@@ -599,7 +622,7 @@ export default function App() {
               <li><a href="#concept" className="footer-link">About Us</a></li>
               <li><a href="#lookbook" className="footer-link">Editorial 2026</a></li>
               <li><a href="#acquire" className="footer-link">Guía de Tallas</a></li>
-              <li><a href="#acquire" className="footer-link">Envéos & Políticas</a></li>
+              <li><a href="#acquire" className="footer-link">Envíos & Políticas</a></li>
             </ul>
           </div>
 

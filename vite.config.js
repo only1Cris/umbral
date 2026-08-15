@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
-  base: '/umbral/',
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? '/umbral/' : '/',
   plugins: [react()],
   server: {
     port: 5173,
@@ -34,4 +34,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
