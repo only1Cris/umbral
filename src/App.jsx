@@ -77,7 +77,8 @@ export default function App() {
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
       const frameNum = String(i).padStart(3, '0');
-      img.src = `/assets/frames/ezgif-frame-${frameNum}.png`;
+      const baseUrl = import.meta.env.BASE_URL;
+      img.src = `${baseUrl}assets/frames/ezgif-frame-${frameNum}.png`;
 
       img.onload = () => {
         loadedCount++;
@@ -490,21 +491,21 @@ export default function App() {
             <h2 className="section-heading">SOMBRAS & ARQUITECTURA</h2>
             <div className="lookbook-grid">
               <div className="lookbook-card">
-                <img src="/assets/branding/1.jpg" alt="Umbral Lookbook 01" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/branding/1.jpg`} alt="Umbral Lookbook 01" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">PERSPECTIVA FRONTAL</span>
                   <span className="lookbook-coord">10°29'N 66°53'W</span>
                 </div>
               </div>
               <div className="lookbook-card">
-                <img src="/assets/branding/2.jpg" alt="Umbral Lookbook 02" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/branding/2.jpg`} alt="Umbral Lookbook 02" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">DETALLE CONSTRUCCIÓN</span>
                   <span className="lookbook-coord">HEAVY RIB COLLAR</span>
                 </div>
               </div>
               <div className="lookbook-card">
-                <img src="/assets/branding/3.jpg" alt="Umbral Lookbook 03" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/branding/3.jpg`} alt="Umbral Lookbook 03" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">SILUETA POSTERIOR</span>
                   <span className="lookbook-coord">OVERSIZED DRAPE</span>
