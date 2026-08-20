@@ -288,33 +288,67 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Editorial Gallery (Inspired by umbralbrd3) */}
+      {/* Editorial Gallery & Lookbook */}
       <section className="home-editorial-section" id="editorial">
         <div className="editorial-head">
-          <span className="sub-tag">[03 // CAMPAÑA FOTOGRÁFICA]</span>
-          <h2 className="main-title">SOMBRAS, TEXTURA & LUZ NATURAL</h2>
+          <span className="sub-tag">[03 // CAMPAÑA EDITORIAL & PACKAGING]</span>
+          <h2 className="main-title">SOMBRAS, ARQUITECTURA & OBJETOS</h2>
         </div>
 
         <div className="editorial-mosaic">
           <div className="mosaic-item large">
-            <img src={`${baseUrl}/assets/branding/umbralbrd1.jpg`} alt="Umbral Editorial 1" loading="lazy" />
+            <img
+              src={`${baseUrl}/assets/branding/editorial-1.webp`}
+              alt="Umbral Modelo en Espacio Brutalista"
+              loading="lazy"
+            />
             <div className="mosaic-caption">
-              <span>FIGURA & CONCRETO BRUTALISTA</span>
-              <span>CARACAS, VE</span>
+              <span>FIGURA & CONCRETO // CARACAS</span>
+              <span>DROP 001 CORE TEE</span>
             </div>
           </div>
           <div className="mosaic-item">
-            <img src={`${baseUrl}/assets/branding/umbralbrd3.jpg`} alt="Umbral Editorial 2" loading="lazy" />
+            <img
+              src={`${baseUrl}/assets/branding/editorial-2.webp`}
+              alt="Umbral Panel Carmín y Luz Rasante"
+              loading="lazy"
+            />
             <div className="mosaic-caption">
-              <span>ESTILO FOTOGRÁFICO TONAL</span>
-              <span>DROP 001</span>
+              <span>ESPACIO DE TRANSICIÓN & LUZ</span>
+              <span>CARMÍN PROFUNDO</span>
             </div>
           </div>
           <div className="mosaic-item">
-            <img src={`${baseUrl}/assets/branding/umbralbrd4.jpg`} alt="Umbral Editorial 3" loading="lazy" />
+            <img
+              src={`${baseUrl}/assets/branding/editorial-3.webp`}
+              alt="Umbral Zipper Pouch Packaging Oficial"
+              loading="lazy"
+            />
             <div className="mosaic-caption">
-              <span>APLICACIONES & PACKAGING</span>
+              <span>PACKAGING & BALLISTIC POUCH</span>
               <span>OBJECTS FOR THE EVERYDAY</span>
+            </div>
+          </div>
+          <div className="mosaic-item">
+            <img
+              src={`${baseUrl}/assets/branding/editorial-4.webp`}
+              alt="Umbral Hang Tag de Alto Gramaje"
+              loading="lazy"
+            />
+            <div className="mosaic-caption">
+              <span>HANG TAG // DETALLES & GRAMAJE</span>
+              <span>EDICIÓN NUMERADA</span>
+            </div>
+          </div>
+          <div className="mosaic-item">
+            <img
+              src={`${baseUrl}/assets/branding/editorial-5.webp`}
+              alt="Umbral Tarjeta de Autenticidad"
+              loading="lazy"
+            />
+            <div className="mosaic-caption">
+              <span>TARJETA DE AUTENTICIDAD [U]</span>
+              <span>LIMITED RELEASE</span>
             </div>
           </div>
         </div>

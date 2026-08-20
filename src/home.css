@@ -1014,9 +1014,9 @@
 
 .editorial-mosaic {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  grid-template-rows: 320px 320px;
-  gap: 1.8rem;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  grid-template-rows: 280px 280px;
+  gap: 1.5rem;
 }
 
 .mosaic-item {
@@ -1029,6 +1029,7 @@
 
 .mosaic-item.large {
   grid-row: span 2;
+  grid-column: 1;
 }
 
 .mosaic-item img {
