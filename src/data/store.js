@@ -21,19 +21,26 @@ export const initialDropsData = [
   {
     id: 'drop-02',
     number: '002',
-    title: 'BRUTALIST HOODIE',
-    tagline: 'FRENCH TERRY 460 GSM // DOUBLE LAYER HOOD',
+    title: 'SIGNATURE TEE [U]',
+    tagline: 'OVERSIZE FIT // 80% ALGODÓN 20% POLIÉSTER JERSEY 30.1',
     category: 'PRENDAS',
-    status: 'COMING_SOON',
-    price: 45,
+    status: 'ACTIVE',
+    price: 30,
     currency: 'USD',
-    color: 'Concrete Gray (#6B6B68)',
+    color: 'Pure White & Deep Black',
     origin: 'Caracas, VE',
-    specs: ['460 GSM French Terry', 'Corte Arquitectónico', 'Bolsillo Oculto Invisible'],
-    sizes: ['M', 'L', 'XL'],
-    heroImage: '/assets/branding/hoodie-drop2.webp',
+    specs: [
+      'Cuello Rib Grueso de Alta Densidad',
+      'Estampado TPU Relieve Acabado Mate (4.5 - 5 cm)',
+      '80% Algodón / 20% Poliéster Jersey 30.1',
+      'Corte Boxy Oversize Arquitectónico'
+    ],
+    sizes: ['S', 'M'],
+    colors: ['WHITE', 'BLACK'],
+    heroImage: '/assets/drop02/white-hero.webp',
+    heroImageBlack: '/assets/drop02/black-hero.webp',
     route: '/merchandise/drop-02',
-    isInteractive: false,
+    isInteractive: true,
   },
   {
     id: 'drop-03',
@@ -194,3 +201,8 @@ export async function saveSiteConfig(config) {
     }
   }
 }
+
+export const drops = initialDropsData;
+export const config = initialSiteConfig;
+
+

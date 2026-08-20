@@ -404,7 +404,7 @@ export default function HomePage() {
           <div className="f-col-nav">
             <h4>Colección</h4>
             <Link to="/merchandise/drop-01">Drop 001 Core Tee (3D)</Link>
-            <a href="#drops">Drop 002 Brutalist Hoodie</a>
+            <Link to="/merchandise/drop-02">Drop 002 Signature Tee (3D)</Link>
             <a href="#drops">Objetos & Accesorios</a>
           </div>
 
