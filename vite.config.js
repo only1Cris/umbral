@@ -9,7 +9,7 @@ export default defineConfig(({ command }) => ({
     host: true,
     allowedHosts: true,
     watch: {
-      ignored: ['**/ezgif-secuence-frames/**', '**/UMBRAL/**'],
+      ignored: ['**/ezgif-secuence-frames/**', '**/UMBRAL/**', '**/DROP002 UMBRAL/**', '**/frames**/**'],
     },
   },
   build: {

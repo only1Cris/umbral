@@ -1,19 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { getDropsData, getSiteConfig } from '../data/store';
+import Lenis from 'lenis';
+import { getDropsData, getSiteConfig, fetchDropsData, fetchSiteConfig } from '../data/store';
 
 export default function HomePage() {
-  const [drops, setDrops] = useState([]);
-  const [config, setConfig] = useState(null);
+  const [drops, setDrops] = useState(getDropsData());
+  const [config, setConfig] = useState(getSiteConfig());
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [isFilterFading, setIsFilterFading] = useState(false);
   const [vipEmail, setVipEmail] = useState('');
   const [vipSuccess, setVipSuccess] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const lenisRef = useRef(null);
 
   useEffect(() => {
-    setDrops(getDropsData());
-    setConfig(getSiteConfig());
+    // Inicializar Lenis para smooth scroll idéntico a Drop 01 y Drop 02
+    const isMobile = window.innerWidth < 768;
+    const lenis = new Lenis({
+      duration: isMobile ? 0.9 : 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.8,
+      syncTouch: false,
+    });
+    lenisRef.current = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    const rafId = requestAnimationFrame(raf);
+
+    async function loadData() {
+      const d = await fetchDropsData();
+      const c = await fetchSiteConfig();
+      if (d) setDrops(d);
+      if (c) setConfig(c);
+    }
+    loadData();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
   }, []);
 
   const handleCategoryChange = (cat) => {
@@ -38,6 +68,17 @@ export default function HomePage() {
     setTimeout(() => setVipSuccess(false), 5000);
   };
 
+  const scrollToSection = (id, e) => {
+    if (e) e.preventDefault();
+    setIsMenuOpen(false);
+    const el = document.getElementById(id);
+    if (el && lenisRef.current) {
+      lenisRef.current.scrollTo(el, { offset: -80 });
+    } else if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   if (!config) return null;
 
   const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -53,16 +94,16 @@ export default function HomePage() {
           </Link>
 
           <nav className="home-nav-desktop">
-            <a href="#drops" className="home-nav-item">
+            <a href="#drops" className="home-nav-item" onClick={(e) => scrollToSection('drops', e)}>
               <span>Colección / Drops</span>
             </a>
-            <a href="#manifesto" className="home-nav-item">
+            <a href="#manifesto" className="home-nav-item" onClick={(e) => scrollToSection('manifesto', e)}>
               <span>Concepto</span>
             </a>
-            <a href="#editorial" className="home-nav-item">
+            <a href="#editorial" className="home-nav-item" onClick={(e) => scrollToSection('editorial', e)}>
               <span>Editorial</span>
             </a>
-            <a href="#vip" className="home-nav-item">
+            <a href="#vip" className="home-nav-item" onClick={(e) => scrollToSection('vip', e)}>
               <span>Acceso VIP</span>
             </a>
           </nav>
@@ -88,29 +129,26 @@ export default function HomePage() {
         {/* Mobile menu dropdown */}
         <div className={`home-mobile-drawer ${isMenuOpen ? 'open' : ''}`}>
           <div className="drawer-links">
-            <a href="#drops" onClick={() => setIsMenuOpen(false)}>
+            <a href="#drops" onClick={(e) => scrollToSection('drops', e)}>
               <span>01 / Catálogo de Drops</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
-            <a href="#manifesto" onClick={() => setIsMenuOpen(false)}>
+            <a href="#manifesto" onClick={(e) => scrollToSection('manifesto', e)}>
               <span>02 / Manifesto de Marca</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
-            <a href="#editorial" onClick={() => setIsMenuOpen(false)}>
+            <a href="#editorial" onClick={(e) => scrollToSection('editorial', e)}>
               <span>03 / Galería Editorial</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
-            <a href="#vip" onClick={() => setIsMenuOpen(false)}>
+            <a href="#vip" onClick={(e) => scrollToSection('vip', e)}>
               <span>04 / Registro VIP</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
             <div className="drawer-divider"></div>
             <Link to="/merchandise/drop-01" className="drawer-highlight-link" onClick={() => setIsMenuOpen(false)}>
               <span>★ DROP 001 CORE TEE (3D)</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </Link>
-            <Link to="/admin" className="drawer-admin-link" onClick={() => setIsMenuOpen(false)}>
-              <span>⚙ Portal Staff [Admin]</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </Link>
           </div>
         </div>
@@ -153,7 +191,7 @@ export default function HomePage() {
           <div className="hero-cta-group">
             <a href="#drops" className="btn-explore-drops">
               <span>EXPLORAR ARCHIVO DE DROPS</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </a>
             <Link to="/merchandise/drop-01" className="btn-experience-3d">
               <span>VER DROP 001 EN 3D</span>
@@ -235,7 +273,7 @@ export default function HomePage() {
                   {drop.isInteractive ? (
                     <Link to={drop.route} className="btn-card-primary">
                       <span>EXPERIENCIA 3D COMPLETA</span>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                     </Link>
                   ) : (
                     <a
@@ -405,19 +443,19 @@ export default function HomePage() {
             <h4>Colección</h4>
             <Link to="/merchandise/drop-01">Drop 001 Core Tee (3D)</Link>
             <Link to="/merchandise/drop-02">Drop 002 Signature Tee (3D)</Link>
-            <a href="#drops">Objetos & Accesorios</a>
+            <a href="#drops" onClick={(e) => scrollToSection('drops', e)}>Objetos & Accesorios</a>
           </div>
 
           <div className="f-col-nav">
             <h4>Marca</h4>
-            <a href="#manifesto">Concepto de Transición</a>
-            <a href="#editorial">Galería Editorial</a>
+            <a href="#manifesto" onClick={(e) => scrollToSection('manifesto', e)}>Concepto de Transición</a>
+            <a href="#editorial" onClick={(e) => scrollToSection('editorial', e)}>Galería Editorial</a>
             <Link to="/admin">Portal de Gestión [Admin]</Link>
           </div>
 
           <div className="f-col-nav">
             <h4>Contacto</h4>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram {config.instagramHandle}</a>
+            <a href="https://www.instagram.com/umbral.archive001/" target="_blank" rel="noopener noreferrer">Instagram {config.instagramHandle}</a>
             <a href={`https://wa.me/${config.whatsappNumber}`} target="_blank" rel="noopener noreferrer">WhatsApp Directo</a>
             <span>{config.shippingInfo}</span>
           </div>

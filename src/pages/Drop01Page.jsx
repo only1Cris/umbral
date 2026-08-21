@@ -90,6 +90,11 @@ export default function Drop01Page() {
   };
 
   useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -116,7 +121,7 @@ export default function Drop01Page() {
       const img = new Image();
       img.decoding = 'async';
       const frameNum = String(i).padStart(3, '0');
-      img.src = `${baseUrl}assets/frames/ezgif-frame-${frameNum}.webp`;
+      img.src = `${baseUrl}assets/drop01-frames/ezgif-frame-${frameNum}.webp`;
 
       img.onload = () => {
         loadedCount++;
@@ -169,6 +174,7 @@ export default function Drop01Page() {
       syncTouch: false,
     });
     lenisRef.current = lenis;
+    lenis.scrollTo(0, { immediate: true });
 
     lenis.on('scroll', ScrollTrigger.update);
     const tickerCallback = (time) => lenis.raf(time * 1000);
@@ -621,24 +627,24 @@ export default function Drop01Page() {
             <h2 className="section-heading">SOMBRAS & ARQUITECTURA</h2>
             <div className="lookbook-grid">
               <div className="lookbook-card">
-                <img src={`${import.meta.env.BASE_URL}assets/branding/1.webp`} alt="Umbral Lookbook 01" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/drop01/core-hero.webp`} alt="Umbral Lookbook 01" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">PERSPECTIVA FRONTAL</span>
                   <span className="lookbook-coord">10°29'N 66°53'W</span>
                 </div>
               </div>
               <div className="lookbook-card">
-                <img src={`${import.meta.env.BASE_URL}assets/branding/2.webp`} alt="Umbral Lookbook 02" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/drop01/core-neck.webp`} alt="Umbral Lookbook 02" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">DETALLE CONSTRUCCIÓN</span>
                   <span className="lookbook-coord">HEAVY RIB COLLAR</span>
                 </div>
               </div>
               <div className="lookbook-card">
-                <img src={`${import.meta.env.BASE_URL}assets/branding/3.webp`} alt="Umbral Lookbook 03" className="lookbook-img" />
+                <img src={`${import.meta.env.BASE_URL}assets/drop01/core-back.webp`} alt="Umbral Lookbook 03" className="lookbook-img" />
                 <div className="lookbook-meta">
                   <span className="lookbook-tag">SILUETA POSTERIOR</span>
-                  <span className="lookbook-coord">OVERSIZED DRAPE</span>
+                  <span className="lookbook-coord">BOXY OVERSIZE FIT</span>
                 </div>
               </div>
             </div>
@@ -689,7 +695,7 @@ export default function Drop01Page() {
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="btn-secondary-dm">
+              <a href="https://www.instagram.com/umbral.archive001/" target="_blank" rel="noopener noreferrer" className="btn-secondary-dm">
                 O consultar vía Direct Message [Instagram]
               </a>
             </div>
@@ -728,14 +734,13 @@ export default function Drop01Page() {
             <ul className="footer-links">
               <li><Link to="/" className="footer-link">Manifesto</Link></li>
               <li><a href="#lookbook" className="footer-link">Editorial 2026</a></li>
-              <li><Link to="/admin" className="footer-link">Portal Staff [Admin]</Link></li>
             </ul>
           </div>
 
           <div className="footer-col">
             <h4 className="footer-heading">Contacto</h4>
             <ul className="footer-links">
-              <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-link">Instagram [@umbral]</a></li>
+              <li><a href="https://www.instagram.com/umbral.archive001/" target="_blank" rel="noopener noreferrer" className="footer-link">Instagram [@umbral.archive001/]</a></li>
               <li><a href={`https://wa.me/?text=${whatsappMessage}`} target="_blank" rel="noopener noreferrer" className="footer-link">WhatsApp Orders</a></li>
               <li><span className="footer-link">Caracas, Venezuela</span></li>
             </ul>

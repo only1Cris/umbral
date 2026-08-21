@@ -14,7 +14,7 @@ export const initialDropsData = [
     origin: 'Caracas, VE',
     specs: ['240 GSM Algodón Peinado', 'Rib Collar 3.2 cm', 'Silueta Boxy Oversize'],
     sizes: ['S', 'M', 'L', 'XL'],
-    heroImage: '/assets/branding/1.webp',
+    heroImage: '/assets/drop01/core-hero.webp',
     route: '/merchandise/drop-01',
     isInteractive: true,
   },
@@ -25,7 +25,7 @@ export const initialDropsData = [
     tagline: 'OVERSIZE FIT // 80% ALGODÓN 20% POLIÉSTER JERSEY 30.1',
     category: 'PRENDAS',
     status: 'ACTIVE',
-    price: 30,
+    price: 25,
     currency: 'USD',
     color: 'Pure White & Deep Black',
     origin: 'Caracas, VE',
@@ -45,15 +45,15 @@ export const initialDropsData = [
   {
     id: 'drop-03',
     number: '003',
-    title: 'ARCHITECTURAL TOTE & CAPSULE',
-    tagline: 'BALLISTIC NYLON // EVERYDAY OBJECT',
-    category: 'OBJETOS',
+    title: 'COMING SOON',
+    tagline: 'COMING SOON // PRENDAS',
+    category: 'PRENDAS',
     status: 'COMING_SOON',
-    price: 20,
+    price: 0,
     currency: 'USD',
     color: 'Matte Black / Carmine Accent',
     origin: 'Caracas, VE',
-    specs: ['Nylon Balístico Impermeable', 'Herrajes Metálicos Mate', 'Capacidad 18 Litros'],
+    specs: ['?', '?', '?'],
     sizes: ['ONE SIZE'],
     heroImage: '/assets/branding/tote-drop3.webp',
     route: '#',
@@ -67,13 +67,13 @@ export const initialSiteConfig = {
   manifesto:
     'UMBRAL representa el punto de transición entre un lugar y otro. Un espacio de paso, cambio y nuevas posibilidades donde la arquitectura brutalista, las sombras y el minimalismo textil convergen.',
   activeDropAnnouncement: 'FIRST OFFICIAL RELEASE / DROP 001 ACTIVE NOW',
-  whatsappNumber: '584120000000',
-  instagramHandle: '@umbral.brand',
+  whatsappNumber: '584123996982',
+  instagramHandle: '@umbral.archive001',
   shippingInfo: 'CARACAS, VENEZUELA • ENVIOS A TODO EL PAÍS',
 };
 
-const DROPS_STORAGE_KEY = 'umbral_drops_data';
-const CONFIG_STORAGE_KEY = 'umbral_site_config';
+const DROPS_STORAGE_KEY = 'umbral_drops_data_v2';
+const CONFIG_STORAGE_KEY = 'umbral_site_config_v2';
 
 export async function fetchDropsData() {
   if (isSupabaseConfigured && supabase) {
